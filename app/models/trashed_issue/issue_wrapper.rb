@@ -78,7 +78,7 @@ class TrashedIssue
               when 'cf'
                 detail.custom_field&.visible_by?(project, user)
               when 'relation'
-                Issue.find_by_id(detail.value || detail.old_value).try(:visible?, user) ||
+                Issue.find_by_id(detail.value || detail.old_value)&.visible?(user) ||
                   Issue.new(id: detail.value || detail.old_value)
               else
                 true
