@@ -166,7 +166,7 @@ RSpec.describe TrashedIssue, type: :model do
       let(:subject_before) { 'before' }
       let(:subject_after) { 'after' }
       before :each do
-        source_issue.init_journal(user, notes)
+        source_issue.reload.init_journal(user, notes)
         source_issue.update!(subject: subject_after)
       end
       it {
