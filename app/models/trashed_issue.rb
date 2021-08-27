@@ -15,7 +15,7 @@ class TrashedIssue < ActiveRecord::Base
                 description: nil,
                 author: :deleted_by,
                 url: ->(i) { { controller: :trashed_issues, action: :show, id: i.id } },
-                type: -> { 'del' } # for del-icon
+                type: ->(_) { 'del' } # for del-icon
   acts_as_activity_provider scope: -> { joins(:project) },
                             author_key: :deleted_by_id,
                             timestamp: "#{table_name}.created_at"
