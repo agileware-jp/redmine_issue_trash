@@ -7,13 +7,14 @@ class TrashedIssue < ActiveRecord::Base
 
   acts_as_attachable view_permission: :view_files
   acts_as_event datetime: :created_at,
-                title: ->(i) {
-                         I18n.t('trashed_issue.event_title', id: i.attributes_json['id'],
-                                                             subject: i.attributes_json['subject'])
+                title: lambda { |i|
+                         I18n.t('trashed_issue.event_title',
+                                id: i.attributes_json['id'],
+                                subject: i.attributes_json['subject'])
                        },
                 description: nil,
                 author: :deleted_by,
-                url: ->(i) { controller: :trashed_issues, action: :show, id: i.id } },
+                url: ->(i) { { controller: :trashed_issues, action: :show, id: i.id } },
                 type: -> { 'del' } # for del-icon
   acts_as_activity_provider scope: -> { joins(:project) },
                             author_key: :deleted_by_id,
