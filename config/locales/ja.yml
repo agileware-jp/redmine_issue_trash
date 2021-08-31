@@ -1,4 +1,6 @@
 ja:
+  text_issues_destroy_confirmation: '選択したチケットをゴミ箱に移動させますか？'
+
   label_trashed_issue_plural: 削除されたチケット
   permission_view_trashed_issues: 削除されたチケットの閲覧
   missing_record_prefix: 存在しない
