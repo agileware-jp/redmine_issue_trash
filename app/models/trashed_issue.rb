@@ -34,7 +34,7 @@ class TrashedIssue < ActiveRecord::Base
       where(project: allowed_projects).or(where(project: projects, deleted_by: user))
     end
 
-    def copy_from(issue)
+    def copy_from!(issue)
       return if issue.is_private?
 
       create!(
