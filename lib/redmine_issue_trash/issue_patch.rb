@@ -18,7 +18,7 @@ module RedmineIssueTrash
         attr_writer :trashed
 
         def trash!
-          init_journal(User.current, 'チケットを削除しました') # TODO
+          init_journal(User.current, I18n.t(:notes_issue_trashed))
           save!
           TrashedIssue.copy_from!(self)
         end

@@ -1,6 +1,5 @@
 <div class="contextual">
-  <%# TODO: locales %>
-  <%= link_to '復元', restored_issues_path(id: @trashed.id), method: :post, class: 'icon icon-reload' %>
+  <%= link_to t(:label_restore), restored_issues_path(id: @trashed.id), method: :post, class: 'icon icon-reload' %>
 </div>
 
 <h2 class="inline-flex"><%= issue_heading(@issue) %></h2>
