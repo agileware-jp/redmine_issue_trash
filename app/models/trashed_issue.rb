@@ -75,11 +75,4 @@ class TrashedIssue < ActiveRecord::Base
       end
     end
   end
-
-  def restore!
-    ActiveRecord::Base.transaction do
-      rebuild.save!
-      destroy!
-    end
-  end
 end
