@@ -30,7 +30,7 @@ class TrashedIssue
     end
 
     def status
-      super || IssueStatus.new(name: "#{I18n.t(:missing_record_prefix)} #{I18n.t(:field_tracker)}")
+      super || IssueStatus.new(name: "#{I18n.t(:missing_record_prefix)} #{I18n.t(:field_status)}")
     end
 
     def priority
