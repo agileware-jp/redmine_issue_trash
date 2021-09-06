@@ -61,7 +61,9 @@ class TrashedIssue < ActiveRecord::Base
         'child_ids' => issue.children.ids,
         'relations' => issue.relations.map(&:attributes),
         'watcher_user_ids' => issue.watcher_user_ids,
-        'journals' => issue.journals.map { |j| j.attributes.merge('details' => j.details.map(&:attributes)) }
+        'journals' => issue.journals.reject(&:private_notes?).map do |j|
+          j.attributes.merge('details' => j.details.map(&:attributes))
+        end
       )
     end
   end
