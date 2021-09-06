@@ -4,6 +4,10 @@ class TrashedIssue
   class IssueWrapper < DelegateClass(Issue)
     attr_reader :child_ids, :relations
 
+    class << self
+      delegate :primary_key, :polymorphic_name, to: Issue
+    end
+
     def initialize(attributes)
       super(Issue.new(attributes.except(
                         'custom_field_values',
