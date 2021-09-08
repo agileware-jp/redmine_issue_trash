@@ -1,0 +1,6 @@
+en:
+  label_trashed_issue_plural: Trashed Issues
+  permission_view_trashed_issues: View Trashed Issues
+  missing_record_prefix: Missing
+  trashed_issue:
+    event_title: "#%{id} (Deleted): %{subject}"
