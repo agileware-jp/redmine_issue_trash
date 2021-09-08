@@ -112,7 +112,7 @@ RSpec.describe TrashedIssue, type: :model do
 
     describe 'EstimatedHours' do
       let(:source_issue) { create(:issue, estimated_hours: estimated_hours) }
-      let(:estimated_hours) { Faker::Number.decimal }
+      let(:estimated_hours) { Faker::Number.decimal(l_digits: 2, r_digits: 1) }
       it { expect(issue.estimated_hours).to eq estimated_hours }
     end
 

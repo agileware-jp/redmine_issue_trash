@@ -14,7 +14,7 @@ module RedmineIssueTrash
       extend ActiveSupport::Concern
 
       included do
-        before_destroy -> { trash! }, prepend: true
+        before_destroy :trash!, unless: :destroyed_by_association, prepend: true
         attr_writer :trashed
 
         def trash!
