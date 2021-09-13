@@ -70,6 +70,7 @@ class TrashedIssue < ActiveRecord::Base
 
   def rebuild
     IssueWrapper.new(attributes_json).tap do |i|
+      i.parent_id = nil if i.parent.blank?
       i.attachments = attachments.map do |attachment|
         attachment.copy(container: i)
       end
