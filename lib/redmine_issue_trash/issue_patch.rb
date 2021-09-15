@@ -14,8 +14,14 @@ module RedmineIssueTrash
       extend ActiveSupport::Concern
 
       included do
-        before_destroy -> { TrashedIssue.copy_from(self) }, prepend: true
+        before_destroy :trash!, unless: :destroyed_by_association, prepend: true
         attr_writer :trashed
+
+        def trash!
+          init_journal(User.current, I18n.t(:notes_issue_trashed))
+          save!
+          TrashedIssue.copy_from!(self)
+        end
 
         def trashed?
           @trashed.present?

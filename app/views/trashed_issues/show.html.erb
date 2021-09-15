@@ -1,3 +1,7 @@
+<div class="contextual">
+  <%= link_to t(:label_restore), restored_issues_path(id: @trashed.id), method: :post, class: 'icon icon-reload' %>
+</div>
+
 <h2 class="inline-flex"><%= issue_heading(@issue) %></h2>
 <%= issue_status_type_badge(@issue.status) if IssueStatus.exists?(@issue.status_id) %>
 <% if @issue.is_private? %>

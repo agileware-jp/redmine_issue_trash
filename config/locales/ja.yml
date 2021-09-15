@@ -1,4 +1,10 @@
 ja:
+  text_issues_destroy_confirmation: '選択したチケットをゴミ箱に移動させますか？'
+
+  label_restore: 復元
+  notice_issue_restored: チケットが復元されました
+  notes_issue_trashed: チケットを削除しました
+  notes_issue_restored: チケットを復元しました
   label_trashed_issue_plural: 削除されたチケット
   permission_view_trashed_issues: 削除されたチケットの閲覧
   missing_record_prefix: 存在しない

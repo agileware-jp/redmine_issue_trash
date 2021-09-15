@@ -34,7 +34,7 @@ class TrashedIssue < ActiveRecord::Base
       where(project: allowed_projects).or(where(project: projects, deleted_by: user))
     end
 
-    def copy_from(issue)
+    def copy_from!(issue)
       return if issue.is_private?
 
       create!(
@@ -70,16 +70,10 @@ class TrashedIssue < ActiveRecord::Base
 
   def rebuild
     IssueWrapper.new(attributes_json).tap do |i|
+      i.parent_id = nil if i.parent.blank?
       i.attachments = attachments.map do |attachment|
         attachment.copy(container: i)
       end
-    end
-  end
-
-  def restore!
-    ActiveRecord::Base.transaction do
-      rebuild.save!
-      destroy!
     end
   end
 end

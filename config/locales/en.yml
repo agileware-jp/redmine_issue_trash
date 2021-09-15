@@ -1,4 +1,10 @@
 en:
+  text_issues_destroy_confirmation: 'Are you sure you want to move the selected issue(s) to trash?'
+
+  label_restore: Restore
+  notice_issue_restored: Issue was successfully restored.
+  notes_issue_trashed: Issue was trashed.
+  notes_issue_restored: Issue was restored.
   label_trashed_issue_plural: Trashed Issues
   permission_view_trashed_issues: View Trashed Issues
   missing_record_prefix: Missing
