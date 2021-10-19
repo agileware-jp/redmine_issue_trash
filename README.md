@@ -38,6 +38,17 @@ bundle exec rake redmine:plugins:migrate
 
 After restart, also check if plugin is listed in the installed Redmine plugins list - _(Administration|Plugins)_
 
+## Uninstall
+
+Try this:
+
+* rails redmine:plugins:migrate NAME=redmine_issue_trash VERSION=0
+    RAILS_ENV=production
+    
+## Description and usage info
+
+* <https://github.com/agileware-jp/redmine_issue_trash/wiki>
+
 ## License
 
 Copyright &copy; 2021 [Agileware Inc.](http://agileware.jp)
