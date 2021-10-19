@@ -1,10 +1,6 @@
 # Redmine Issue Trash plugin
 
-_redmine_github_ is a Redmine plugin for connecting a local Redmine installation to a remote Github repository. The plugin allows to:
-
-- Syncronize remote Github repository to a local Git one - all Git-related Redmine features can be used
-- Attach pull request (PR) status icons to issues - will change in real time, when pul request status change - created, approved, merged etc.
-- Connect commit comment to issues via [Redmine commit comments keywords](<(https://www.redmine.org/projects/redmine/wiki/RedmineSettings#Referencing-issues-in-commit-messages)>)
+削除操作を行ったチケットを復元可能とするためのプラグインです。
 
 ## Getting started
 
