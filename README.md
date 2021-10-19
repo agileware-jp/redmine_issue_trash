@@ -1,4 +1,4 @@
-# Redmine Github plugin
+# Redmine Issue Trash plugin
 
 _redmine_github_ is a Redmine plugin for connecting a local Redmine installation to a remote Github repository. The plugin allows to:
 
@@ -17,13 +17,13 @@ cd {LOCAL_REDMINE_DIRECTORY}/plugins
 #### From downloaded release archive file
 
 ```shell
-tar xvzpf redmine_github....
+tar xvzpf redmine_issue_trash....
 ```
 
 #### or via Git clone
 
 ```shell
-git clone https://github.com/agileware-jp/redmine_github.git
+git clone https://github.com/agileware-jp/redmine_issue_trash.git
 ```
 
 #### Install gems and migrate the database
@@ -38,41 +38,9 @@ bundle exec rake redmine:plugins:migrate
 
 After restart, also check if plugin is listed in the installed Redmine plugins list - _(Administration|Plugins)_
 
-### 2. Add the repository to Redmine
-
-For given project, in \_(Settings|Repositories|New Repository) form enter:
-
-- _SCM_ - **Github**
-- _Identifier_ - uniq repository identifier
-- _URL_ - Github repository URL ([clone address](https://help.github.com/en/articles/which-remote-url-should-i-use#cloning-with-https-urls-recommended), starting with `https://` )
-- _Access Token_ - [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
-- _Webhook Secret_ - [webhook secret](https://developer.github.com/webhooks/securing/)
-
-After pressing _'Create'_ button, bare-clone repository will be created inside your Redmine install directory - `{LOCAL_REDMINE_DIRECTORY}/repositories/` path.
-
-> Note the **repository ID** in the _'Edit'_ and _'Delete'_ links - you will need this for the next step (webhook url)
-
-### 3. Connecting Github to Redmine
-
-1. Go to the repository _Settings_ interface on GitHub.
-2. Under _Webhooks_ add a new webHook:
-
-- The _Payload URL_ needs to be of the format: `[redmine_url]/redmine_github/:repository_id/webhook` (for example `http://redmine.example.com/redmine_github/1/webhook`). Repository ID is the one of the **created in the previous step repository**
-- _Content type_: **application/json**
-- _Secret_: **same as Webhook Secret inside you Redmine repository settings**
-- _Which events would you like to trigger this webhook?_ - _Pull requests, Pull request reviews, Pull request review comments, Pushes, Statuses, Commit comments_
-
-### 4. Configure commit comments keywords
-
-In _(Administration|Settings)_ , _Repositories_ tab configure [commit comments keywords](https://www.redmine.org/projects/redmine/wiki/RedmineSettings#Referencing-issues-in-commit-messages).
-
-## Documentation
-
-Read [redmine_github plugin wiki pages](https://github.com/agileware-jp/redmine_github/wiki) (still WIP).
-
 ## License
 
-Copyright &copy; 2019 [Agileware Inc.](http://agileware.jp)
+Copyright &copy; 2021 [Agileware Inc.](http://agileware.jp)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
