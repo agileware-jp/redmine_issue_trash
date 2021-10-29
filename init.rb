@@ -2,7 +2,10 @@
 
 Redmine::Plugin.register :redmine_issue_trash do
   name 'Redmine Issue Trash'
-  version '0.0.1'
+  author 'Agileware Inc.'
+  description 'This is a plugin for Redmine'
+  author_url 'http://agileware.jp'
+  version '1.0.0'
 
   activity_provider :trashed_issues
   project_module :issue_tracking do
