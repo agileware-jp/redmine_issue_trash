@@ -2,6 +2,9 @@
 
 誤操作などで削除してしまったチケットを復元できるようにするプラグインです。
 
+## Requirements
+Redmine 4.2.x or higher.
+
 ## Getting started
 
 ### 1. Install the plugin
