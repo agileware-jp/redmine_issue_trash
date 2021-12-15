@@ -1,6 +1,6 @@
 # Redmine Issue Trash plugin
 
-誤操作などで削除してしまったチケットを復元できるようにするプラグインです。
+This plugin allows you to restore Issues deleted by accident.
 
 ## Requirements
 Redmine 4.2.x or higher.
