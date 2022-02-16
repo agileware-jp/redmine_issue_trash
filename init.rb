@@ -14,6 +14,7 @@ Redmine::Plugin.register :redmine_issue_trash do
 end
 
 ActiveSupport::Reloader.to_prepare do
+  User.include RedmineIssueTrash::UserPatch::Include
   Issue.prepend RedmineIssueTrash::IssuePatch::Prepend
   Issue.include RedmineIssueTrash::IssuePatch::Include
   Project.include RedmineIssueTrash::ProjectPatch::Include
