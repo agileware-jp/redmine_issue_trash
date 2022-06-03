@@ -13,7 +13,7 @@ Redmine::Plugin.register :redmine_issue_trash do
   end
 end
 
-ActiveSupport::Reloader.to_prepare do
+Rails.application.config.after_initialize do
   User.include RedmineIssueTrash::UserPatch::Include
   Issue.prepend RedmineIssueTrash::IssuePatch::Prepend
   Issue.include RedmineIssueTrash::IssuePatch::Include

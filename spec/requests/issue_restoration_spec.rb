@@ -3,9 +3,18 @@
 require File.expand_path('../rails_helper', __dir__)
 
 RSpec.describe 'Issue restoration', type: :request do
+  let(:user) { create(:user, admin: true) }
+
+  before do
+    allow_any_instance_of(User).to receive(:deliver_security_notification) { nil }
+    allow(User).to receive(:current) { user }
+  end
+
   subject { post '/restored_issues', params: { id: trashed.id } }
   let!(:trashed) do
-    create(:issue).destroy
+    issue = create(:issue)
+    issue.watcher_users << create(:user)
+    issue.destroy
     TrashedIssue.last
   end
 
