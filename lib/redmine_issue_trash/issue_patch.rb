@@ -19,7 +19,7 @@ module RedmineIssueTrash
 
         def trash!
           init_journal(User.current, I18n.t(:notes_issue_trashed))
-          save!
+          save!(validate: false)
           TrashedIssue.copy_from!(self)
         end
 
