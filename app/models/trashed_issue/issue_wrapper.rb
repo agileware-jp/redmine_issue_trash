@@ -8,7 +8,7 @@ class TrashedIssue
       delegate :primary_key, :polymorphic_name, to: Issue
     end
 
-    def initialize(attributes)
+    def initialize(attributes, trashed_issue)
       super(Issue.new(attributes.except(
                         'custom_field_values',
                         'child_ids',
@@ -22,7 +22,7 @@ class TrashedIssue
       self.watcher_users = User.where(id: attributes['watcher_user_ids'])
       @child_ids = attributes['child_ids'] || []
       @relations = (attributes['relations'] || []).map { |attr| IssueRelation.new(attr) }
-      build_jornals(attributes)
+      build_jornals(attributes, trashed_issue)
     end
 
     def tracker
@@ -56,7 +56,7 @@ class TrashedIssue
 
     private
 
-    def build_jornals(attributes)
+    def build_jornals(attributes, trashed_issue)
       return if attributes['journals'].blank?
 
       self.journals = attributes['journals'].map do |journal_attributes|
@@ -81,6 +81,10 @@ class TrashedIssue
                 true
               end
             end
+          end
+
+          define_method :attachments do
+            trashed_issue.attachments
           end
         end
       end
