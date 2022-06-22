@@ -83,8 +83,12 @@ class TrashedIssue
             end
           end
 
-          define_method :attachments do
-            trashed_issue.attachments
+          define_method :journalized do |*args|
+            super(*args).tap do |issue|
+              issue.define_singleton_method :attachments do
+                trashed_issue.attachments
+              end
+            end
           end
         end
       end

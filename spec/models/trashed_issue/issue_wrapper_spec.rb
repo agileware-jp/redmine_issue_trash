@@ -16,7 +16,7 @@ RSpec.describe TrashedIssue::IssueWrapper, type: :model do
 
     it 'accesses attachments of the trashed issue' do
       expect(trashed_issue).to receive(:attachments)
-      wrapped_issue.journals.first.attachments
+      wrapped_issue.journals.first.journalized.attachments
     end
   end
 end
