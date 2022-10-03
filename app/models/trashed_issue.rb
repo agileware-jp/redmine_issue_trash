@@ -18,7 +18,7 @@ class TrashedIssue < ActiveRecord::Base
                 type: ->(_) { 'del' } # for del-icon
   acts_as_activity_provider scope: -> { joins(:project) }.tap { |p|
                                      # support proc for old Redmine
-                                     %w[where visible].each do |name|
+                                     %w[where visible reorder].each do |name|
                                        p.define_singleton_method name do |*args|
                                          call.public_send(name, *args)
                                        end
