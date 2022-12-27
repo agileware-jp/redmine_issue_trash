@@ -1,0 +1,64 @@
+version: 2.1
+
+orbs:
+  redmine-plugin: agileware-jp/redmine-plugin@2.3.0
+
+jobs:
+  rspec:
+    parameters:
+      redmine_version:
+        type: string
+      redmine_product:
+        type: string
+        default: 'redmine'
+      ruby_version:
+        type: string
+        default: '2.7'
+      db:
+        type: enum
+        enum: ['mysql', 'pg']
+        default: pg
+      db_version:
+        type: string
+        default: 'latest-ram'
+    executor:
+      name: redmine-plugin/ruby-<< parameters.db >>
+      ruby_version: << parameters.ruby_version >>
+      db_version: << parameters.db_version >>
+    steps:
+      - checkout
+      - redmine-plugin/download-redmine:
+          version: << parameters.redmine_version >>
+      - redmine-plugin/install-self
+      - redmine-plugin/generate-database_yml
+      - redmine-plugin/bundle-install
+      - run: sudo apt-get install fonts-migmix
+      - redmine-plugin/rspec:
+          test_migration_rollback: false
+      - store_artifacts:
+          path: redmine/tmp/capybara
+          destination: screenshots
+
+ignore_trial: &ignore_trial
+  filters:
+    branches:
+      ignore:
+        - trial
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - rspec:
+          name: RSpec on newest versions with PostgreSQL
+          redmine_version: 'latest'
+          ruby_version: '2.7'
+          db: pg
+          <<: *ignore_trial
+      - rspec:
+          name: RSpec on oldest versions with MySQL
+          redmine_version: '4.1.7'
+          ruby_version: '2.6'
+          db: mysql
+          db_version: '5.7-ram'
+          <<: *ignore_trial
