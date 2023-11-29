@@ -4,3 +4,7 @@ gem 'pry-byebug'
 gem 'pry-rails'
 gem 'rails-controller-testing'
 gem 'rspec-rails'
+
+group :test do
+  dependencies.reject! { |i| i.name == 'nokogiri' } # Ensure Nokogiri have new version
+end
