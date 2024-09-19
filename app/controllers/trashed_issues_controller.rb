@@ -14,13 +14,18 @@ class TrashedIssuesController < ApplicationController
   def show
     @issue = @trashed.rebuild
     @relations = @issue.relations
-    @journals = @issue.journals
-    @journals.each.with_index(1) do |journal, indice|
-      journal.indice = indice
-    end
+    @journals = sorted_journals_with_index(@issue.journals)
   end
 
   private
+
+  def sorted_journals_with_index(journals)
+    sorted_journals = journals.sort_by(&:created_on)
+    sorted_journals.each.with_index(1) do |journal, indice|
+      journal.indice = indice
+    end
+    sorted_journals
+  end
 
   def set_trashed_issue
     @trashed = TrashedIssue.find(params[:id])
