@@ -22,14 +22,6 @@ class TrashedIssuesController < ApplicationController
 
   private
 
-  def sorted_journals_with_index(journals)
-    sorted_journals = journals.sort_by(&:created_on)
-    sorted_journals.each.with_index(1) do |journal, indice|
-      journal.indice = indice
-    end
-    sorted_journals
-  end
-
   def set_trashed_issue
     @trashed = TrashedIssue.find(params[:id])
   end
