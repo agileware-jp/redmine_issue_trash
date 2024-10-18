@@ -14,7 +14,10 @@ class TrashedIssuesController < ApplicationController
   def show
     @issue = @trashed.rebuild
     @relations = @issue.relations
-    @journals = sorted_journals_with_index(@issue.journals)
+    @journals = @issue.journals.sort_by(&:created_on)
+    @journals.each.with_index(1) do |journal, indice|
+      journal.indice = indice
+    end
   end
 
   private
