@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TrashedIssue < ActiveRecord::Base
+class TrashedIssue < defined?(ApplicationRecord) == 'constant' ? ApplicationRecord : ActiveRecord::Base
   belongs_to :project
   has_many :trashed_custom_values, dependent: :destroy
   belongs_to :deleted_by, class_name: 'User'
