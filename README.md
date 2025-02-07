@@ -1,6 +1,6 @@
 # Redmine Issue Trash plugin
 
-This plugin allows you to restore Issues deleted by accident.
+This plugin allows you to restore issues deleted by accident.
 
 ## Requirements
 Redmine 4.2.x or higher.
@@ -43,7 +43,7 @@ Try this:
 
 * rails redmine:plugins:migrate NAME=redmine_issue_trash VERSION=0
     RAILS_ENV=production
-    
+
 ## Description and usage info
 
 * <https://github.com/agileware-jp/redmine_issue_trash/wiki>
