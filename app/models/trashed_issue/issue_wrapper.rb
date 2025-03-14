@@ -5,13 +5,7 @@ class TrashedIssue
     attr_reader :child_ids, :relations
 
     class << self
-      METHODS = [:primary_key, :polymorphic_name]
-
-      [:has_query_constraints?, :composite_primary_key?].each do |method|
-        METHODS << method if Alm.redmine_version_higher_than?('5.1')
-      end
-
-      delegate *METHODS, to: Issue
+      delegate :primary_key, :polymorphic_name, :has_query_constraints?, :composite_primary_key?, to: Issue
     end
 
     def initialize(attributes, trashed_issue)
