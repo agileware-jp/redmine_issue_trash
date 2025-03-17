@@ -5,7 +5,7 @@ class TrashedIssue
     attr_reader :child_ids, :relations
 
     class << self
-      delegate :primary_key, :polymorphic_name, to: Issue
+      delegate :primary_key, :polymorphic_name, :has_query_constraints?, :composite_primary_key?, to: Issue
     end
 
     def initialize(attributes, trashed_issue)
