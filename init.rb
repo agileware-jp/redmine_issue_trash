@@ -20,4 +20,5 @@ Rails.application.config.after_initialize do
   Project.include RedmineIssueTrash::ProjectPatch::Include
   Redmine::FieldFormat::RecordList.prepend RedmineIssueTrash::RecordListPatch::Prepend
   Redmine::FieldFormat::AttachmentFormat.prepend RedmineIssueTrash::AttachmentFormatPatch::Prepend
+  Redmine::Acts::Customizable::InstanceMethods.prepend RedmineIssueTrash::CustomizablePatch::Prepend
 end
