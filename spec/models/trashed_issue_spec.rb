@@ -189,4 +189,79 @@ RSpec.describe TrashedIssue, type: :model do
       }
     end
   end
+
+  describe '.copy_from!' do
+    let(:issue) { create(:issue) }
+    let(:user) { create(:user) }
+
+    before do
+      allow(User).to receive(:current).and_return(user)
+    end
+
+    context 'when the issue is private' do
+      let(:issue) { create(:issue, is_private: true) }
+
+      it 'does not create a trashed issue' do
+        expect {
+          TrashedIssue.copy_from!(issue)
+        }.not_to change(TrashedIssue, :count)
+      end
+    end
+
+    context 'when the issue is not private' do
+      it 'creates a trashed issue' do
+        expect {
+          TrashedIssue.copy_from!(issue)
+        }.to change(TrashedIssue, :count).by(1)
+      end
+
+      it 'sets the correct project' do
+        trashed_issue = TrashedIssue.copy_from!(issue)
+        expect(trashed_issue.project).to eq(issue.project)
+      end
+
+      it 'sets the correct deleted_by user' do
+        trashed_issue = TrashedIssue.copy_from!(issue)
+        expect(trashed_issue.deleted_by).to eq(user)
+      end
+
+      it 'sets attributes_json correctly' do
+        custom_field = create(:issue_custom_field, field_format: 'text')
+        custom_value = 'dummy text'
+        issue.custom_values << CustomValue.create!(
+          custom_field: custom_field,
+          customized: issue,
+          value: custom_value
+        )
+        trashed_issue = TrashedIssue.copy_from!(issue)
+
+        expect(trashed_issue.attributes_json).to include(
+          'id' => issue.id,
+          'subject' => issue.subject,
+          'project_id' => issue.project_id,
+          'custom_field_values' => { custom_field.id.to_s => custom_value }
+        )
+      end
+
+      it 'copies attachments' do
+        attachment = create(:attachment, container: issue)
+        trashed_issue = TrashedIssue.copy_from!(issue)
+
+        expect(trashed_issue.attachments.count).to eq(1)
+        expect(trashed_issue.attachments.first.digest).to eq(attachment.digest)
+      end
+
+      it 'copies custom value attachments' do
+        custom_field = create(:issue_custom_field, field_format: 'attachment')
+        custom_value = CustomValue.create!(custom_field: custom_field, customized: issue, value: '1')
+        attachment = create(:attachment, container: custom_value)
+        issue.custom_values << custom_value
+        trashed_issue = TrashedIssue.copy_from!(issue)
+
+        expect(trashed_issue.trashed_custom_values.count).to eq(1)
+        expect(trashed_issue.trashed_custom_values.first.attachments.count).to eq(1)
+        expect(trashed_issue.trashed_custom_values.first.attachments.first.digest).to eq(attachment.digest)
+      end
+    end
+  end
 end
