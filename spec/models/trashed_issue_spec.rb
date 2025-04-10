@@ -264,4 +264,53 @@ RSpec.describe TrashedIssue, type: :model do
       end
     end
   end
+
+  describe '.attributes' do
+    let(:issue) { create(:issue) }
+
+    describe 'custom field values' do
+      let(:custom_field) { create(:issue_custom_field, field_format: field_format, multiple: multiple) }
+      let(:field_format) { 'string' }
+      let(:multiple) { false }
+
+      subject { TrashedIssue.attributes(issue.reload)['custom_field_values'] }
+
+      context 'string' do
+        let(:value) { 'custom value' }
+        before do
+          CustomValue.create(customized: issue, custom_field: custom_field, value: value)
+        end
+
+        it 'get attributes' do
+          is_expected.to eq({custom_field.id => 'custom value'})
+        end
+      end
+
+      context 'Key Value' do
+        let(:field_format) { 'enumeration' }
+        before do
+          custom_field.enumerations.create(name: 'value A')
+          custom_field.enumerations.create(name: 'value B')
+          custom_field.enumerations.create(name: 'value C')
+        end
+
+        context 'multiple=false' do
+          let(:multiple) { false }
+          before do
+            CustomValue.create(customized: issue, custom_field: custom_field, value: 'value B')
+          end
+          it { is_expected.to eq({custom_field.id => 'value B'}) }
+        end
+
+        context 'multiple=true' do
+          let(:multiple) { true }
+          before do
+            CustomValue.create(customized: issue, custom_field: custom_field, value: 'value A')
+            CustomValue.create(customized: issue, custom_field: custom_field, value: 'value B')
+          end
+          it { is_expected.to eq({custom_field.id => ['value A', 'value B']}) }
+        end
+      end
+    end
+  end
 end
