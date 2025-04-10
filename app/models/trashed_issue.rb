@@ -64,7 +64,9 @@ class TrashedIssue < defined?(ApplicationRecord) == 'constant' ? ApplicationReco
 
     def attributes(issue)
       issue.attributes.except('lock_version', 'lft', 'rgt').merge(
-        'custom_field_values' => issue.custom_values.map { |cv| [cv.custom_field_id, cv.value] }.to_h,
+        'custom_field_values' => issue.custom_values.group_by { |cv| cv.custom_field }.map do |cf, values|
+          [cf.id, cf.multiple? ? values.map(&:value) : values.first.value ]
+        end.to_h,
         'child_ids' => issue.children.ids,
         'relations' => issue.relations.map(&:attributes),
         'watcher_user_ids' => issue.watcher_user_ids,
