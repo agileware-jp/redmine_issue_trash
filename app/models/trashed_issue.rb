@@ -81,12 +81,7 @@ class TrashedIssue < defined?(ApplicationRecord) == 'constant' ? ApplicationReco
     IssueWrapper.new(attributes_json, self).tap do |i|
       i.parent_id = nil if i.parent.blank?
       i.attachments = attachments.map do |attachment|
-        # MEMO: ファイルがイメージの場合、Attachment#idがないと`Attachment.latest_attach`からエラーが発生します。
-        # Attachment.latest_attach
-        #   https://github.com/redmine/redmine/blob/master/app/models/attachment.rb#L366-L372
-        # ApplicationHelper#parse_inline_attachments
-        #   https://github.com/redmine/redmine/blob/master/app/helpers/application_helper.rb#L1006
-        attachment.copy(id: attachment.id, container: i)
+        attachment.copy(container: i)
       end
     end
   end
