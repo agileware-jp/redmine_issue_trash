@@ -5,6 +5,7 @@ require File.expand_path('../rails_helper', __dir__)
 RSpec.describe Issue, type: :model do
   describe '#destroy' do
     before :each do
+      allow_any_instance_of(User).to receive(:deliver_security_notification) { nil }
       allow(User).to receive(:current).and_return create(:user, admin: true)
     end
     let!(:tracker) { create(:tracker) }
