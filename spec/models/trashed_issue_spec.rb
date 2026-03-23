@@ -262,6 +262,36 @@ RSpec.describe TrashedIssue, type: :model do
         expect(trashed_issue.trashed_custom_values.first.attachments.count).to eq(1)
         expect(trashed_issue.trashed_custom_values.first.attachments.first.digest).to eq(attachment.digest)
       end
+
+      context 'when the adapter is mysql2 or trilogy' do
+        %w[Mysql2 Trilogy].each do |adapter|
+          context "with #{adapter} adapter" do
+            before do
+              connection = instance_double(ActiveRecord::Base.connection.class, adapter_name: adapter)
+              allow(ActiveRecord::Base).to receive(:connection).and_return(connection)
+            end
+
+            it 'stores attributes_json as a JSON string' do
+              trashed_issue = TrashedIssue.copy_from!(issue)
+              expect(trashed_issue.attributes_json).to be_a(String)
+              expect(JSON.parse(trashed_issue.attributes_json)).to include('id' => issue.id)
+            end
+          end
+        end
+      end
+
+      context 'when the adapter is not mysql2 or trilogy' do
+        before do
+          connection = instance_double(ActiveRecord::Base.connection.class, adapter_name: 'PostgreSQL')
+          allow(ActiveRecord::Base).to receive(:connection).and_return(connection)
+        end
+
+        it 'stores attributes_json as a Hash' do
+          trashed_issue = TrashedIssue.copy_from!(issue)
+          expect(trashed_issue.attributes_json).to be_a(Hash)
+          expect(trashed_issue.attributes_json).to include('id' => issue.id)
+        end
+      end
     end
   end
 

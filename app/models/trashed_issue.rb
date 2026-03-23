@@ -41,12 +41,20 @@ class TrashedIssue < defined?(ApplicationRecord) == 'constant' ? ApplicationReco
       where(project: allowed_projects).or(where(project: projects, deleted_by: user))
     end
 
+    def attrs_json_for_copy(issue)
+      if %w[trilogy mysql2].include?(ActiveRecord::Base.connection.adapter_name.downcase)
+        attributes(issue).to_json
+      else
+        attributes(issue)
+      end
+    end
+
     def copy_from!(issue)
       return if issue.is_private?
 
       create!(
         project: issue.project,
-        attributes_json: attributes(issue),
+        attributes_json: attrs_json_for_copy(issue),
         deleted_by: User.current
       ).tap do |i|
         i.attachments = issue.attachments.map do |attachment|
@@ -65,7 +73,7 @@ class TrashedIssue < defined?(ApplicationRecord) == 'constant' ? ApplicationReco
     def attributes(issue)
       issue.attributes.except('lock_version', 'lft', 'rgt').merge(
         'custom_field_values' => issue.custom_values.group_by { |cv| cv.custom_field }.map do |cf, values|
-          [cf.id, cf.multiple? ? values.map(&:value) : values.first.value ]
+          [cf.id, cf.multiple? ? values.map(&:value) : values.first.value]
         end.to_h,
         'child_ids' => issue.children.ids,
         'relations' => issue.relations.map(&:attributes),
