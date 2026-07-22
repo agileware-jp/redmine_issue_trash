@@ -13,6 +13,13 @@ class TrashedIssuesController < ApplicationController
 
   def show
     @issue = @trashed.rebuild
+    # #rebuild sets @issue.attachments to unsaved copies (id is nil) built for
+    # the restore flow (see RestoredIssuesController). The view always renders
+    # attachments via @trashed.attachments, so clear these out here to avoid
+    # mixing them with @trashed.attachments when textilizable merges both
+    # lists, which crashes InlineAttachmentsScrubber's sort_by (id nil vs id
+    # present with an equal created_on cannot be compared).
+    @issue.attachments = []
     @relations = @issue.relations
     @journals = @issue.journals.sort_by(&:created_on)
     @journals.each.with_index(1) do |journal, indice|
