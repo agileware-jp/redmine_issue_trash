@@ -34,7 +34,8 @@ jobs:
           name: Downgrade RubyGems for commonmarker < 2.6
           command: |
             if grep -q "commonmarker.*2\.3\.0" redmine/Gemfile; then
-              gem update --system 3.7.2
+              sudo gem update --system 3.7.2
+              gem --version | grep -q '^3\.' # fail loudly if the downgrade did not stick
             fi
       - redmine-plugin/bundle-install
       - redmine-plugin/migrate-without-plugins
@@ -70,7 +71,8 @@ jobs:
           name: Downgrade RubyGems for commonmarker < 2.6
           command: |
             if grep -q "commonmarker.*2\.3\.0" redmine/Gemfile; then
-              gem update --system 3.7.2
+              sudo gem update --system 3.7.2
+              gem --version | grep -q '^3\.' # fail loudly if the downgrade did not stick
             fi
       - redmine-plugin/bundle-install
       - run: sudo apt-get install fonts-migmix
