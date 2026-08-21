@@ -21,6 +21,14 @@ RSpec.describe TrashedIssue, type: :model do
     end
   end
 
+  describe 'activity provider scope' do
+    # Activityタブでのevent_author/project参照がN+1にならないよう、
+    # projectとdeleted_byをpreloadしていることを検証する
+    subject(:scope) { described_class.activity_provider_options['trashed_issues'][:scope].call }
+
+    it { expect(scope.preload_values).to contain_exactly(:project, :deleted_by) }
+  end
+
   describe '#attachments' do
     subject(:attachments) do
       source_issue.destroy
