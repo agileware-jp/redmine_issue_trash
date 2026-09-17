@@ -16,6 +16,7 @@ class TrashedIssue
                         'journals',
                         'watcher_user_ids'
                       )))
+      expose_trashed_attachments(trashed_issue)
       self.trashed = true
       self.priority_id = attributes['priority_id']
       self.custom_field_values = attributes['custom_field_values'] || {}
@@ -55,6 +56,25 @@ class TrashedIssue
     end
 
     private
+
+    # 本体はインライン添付・attachment: リンク・{{thumbnail}} マクロを、
+    # 描画対象オブジェクトの #attachments から解決する。
+    # 本文の描画対象はこの wrapper だが、カスタムフィールドの描画対象は
+    # CustomFieldValue#customized、つまり内側の Issue になるため、
+    # 内側の Issue 自身が正しい添付を返す必要がある。
+    #
+    # TrashedIssue#rebuild が復元用に持たせるのは未保存のコピーで id が nil。
+    # これが本体へ渡ると、Redmine 7.0 は
+    # Redmine::WikiFormatting::InlineAttachmentsScrubber の
+    # sort_by { [created_on, id] } で nil と Integer を比較して ArgumentError になり、
+    # 6.1 でも AttachmentPatch に除外されて添付を解決できない。
+    #
+    # そこで読み出しはゴミ箱側の保存済み添付に固定する。復元
+    # (RestoredIssuesController) は association の autosave がコピーを保存するので、
+    # この上書きの影響を受けない。
+    def expose_trashed_attachments(trashed_issue)
+      __getobj__.define_singleton_method(:attachments) { trashed_issue.attachments }
+    end
 
     def build_jornals(attributes, trashed_issue)
       return if attributes['journals'].blank?

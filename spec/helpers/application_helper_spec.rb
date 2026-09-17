@@ -8,10 +8,9 @@ RSpec.describe ApplicationHelper, type: :helper do
   describe '#textilizable' do
     subject { helper.textilizable(issue, :description, :attachments => trashed.attachments) }
 
-    # TrashedIssuesController#show clears @issue.attachments after #rebuild, since
-    # #rebuild's unsaved copies (id is nil) would otherwise duplicate @trashed.attachments
-    # here and crash InlineAttachmentsScrubber's sort_by (see trashed_issue_show_spec.rb).
-    let(:issue) { trashed.rebuild.tap { |i| i.attachments = [] } }
+    # TrashedIssue::IssueWrapper#attachments はゴミ箱側の保存済み添付を返すため、
+    # #rebuild が内側の Issue へ持たせる未保存コピー(id が nil)は本体へ渡らない。
+    let(:issue) { trashed.rebuild }
     let(:trashed) { TrashedIssue.first }
     let(:source_issue) { create(:issue, description: "![](testfile.jpg)\r\n") }
     let!(:attachment) { create(:attachment, container: source_issue) }

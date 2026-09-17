@@ -52,4 +52,23 @@ RSpec.describe 'Issue restoration', type: :request do
       expect(flash[:error]).to eq 'Subject cannot be blank'
     end
   end
+
+  context 'when the trashed issue had attachments' do
+    let!(:trashed) do
+      issue = create(:issue, tracker: tracker)
+      create(:attachment, container: issue).update!(filename: 'testfile.jpg')
+
+      issue.reload.destroy
+      TrashedIssue.last
+    end
+
+    # IssueWrapper は描画のために #attachments をゴミ箱側の保存済み添付へ固定するが、
+    # 復元は association の autosave が #rebuild の未保存コピーを保存する経路なので、
+    # 添付はそのまま復元されること。
+    it 'retains the attachments on the restored issue' do
+      subject
+      restored = Issue.find(assigns(:issue).id)
+      expect(restored.attachments.map(&:filename)).to eq ['testfile.jpg']
+    end
+  end
 end
