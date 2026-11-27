@@ -1,8 +1,7 @@
 version: 2.1
 
 orbs:
-  bamboo: agileware-jp/bamboo@1.1.1
-  redmine-plugin: agileware-jp/redmine-plugin@4.0.2
+  redmine-plugin: agileware-jp/redmine-plugin@4.2.0
 
 jobs:
   rspec-git-url:
